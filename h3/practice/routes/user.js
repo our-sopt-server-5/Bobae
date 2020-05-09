@@ -70,9 +70,34 @@ router.post('/signin', async (req, res) => {
 
 })
 
+router.get('/profile/:id', async (req, res) => {
+    const id = req.params.id;
+    if (!id) {
+                return res.status(statusCode.BAD_REQUEST)
+            .send(util.fail(statusCode.BAD_REQUEST, resMessage.NULL_VALUE));
+    }
+
+    // 존재하는 아이디인지 확인 - 없다면 No user 반환
+    const user = UserModel.filter(user => user.id == id);
+    if (user.length == 0) {
+        return res.status(statusCode.BAD_REQUEST)
+            .send(util.fail(statusCode.BAD_REQUEST, resMessage.NO_USER));
+    }
+
+    return res.status(statusCode.OK)
+        .send(util.success(statusCode.OK, resMessage.READ_PROFILE_SUCCESS,
+            {
+                userId: user[0].id,
+                name: user[0].name,
+                email: user[0].email
+            }));
+
+    
+})
+
 router.get('/debug', (req, res) => {
     console.log(req.query);
-    console.log(req.param);
+    console.log(req.params);
     console.log(req.body);
     res.send("HELLO");
 });
