@@ -12,5 +12,9 @@
     "http-errors": "~1.7.3",
     "jade": "~1.11.0",
     "morgan": "~1.10.0"
+  },
+  "devDependencies": {
+    "clean-css": "^4.2.3",
+    "constantinople": "^4.0.1"
   }
 }
