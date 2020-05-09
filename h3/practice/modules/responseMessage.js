@@ -13,6 +13,18 @@ module.exports = {
     NO_USER: "존재하지 않는 회원입니다.",
     MISS_MATCH_PW: "비밀번호가 맞지 않습니다.",
     
+    // 게시글
+    POST_SUCCESS: "게시글 조회 성공",
+    POST_FAIL: "게시글 조회 실패",
+    POST_CREATE_SUCCESS: "게시글 생성 성공",
+    POST_CREATE_FAIL: "게시글 생성 실패",
+    POST_UPDATE_SUCCESS: "게시글 수정 성공",
+    POST_UPDATE_FAIL: "게시글 수정 실패",
+    POST_DELETE_SUCCESS: "게시글 삭제 성공",
+    POST_DELETE_FAIL: "게시글 삭제 실패",
+    NO_POST: "존재하지 않는 회원입니다.",
+    
+
     // 프로필 조회
     READ_PROFILE_SUCCESS: "프로필 조회 성공"
 };

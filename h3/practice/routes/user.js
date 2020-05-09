@@ -66,7 +66,7 @@ router.post('/signin', async (req, res) => {
 
     // 성공 - login success와 함께 user Id 반환
     return res.status(statusCode.OK)
-        .send(util.success(statusCode.OK, resMessage.READ_PROFILE_SUCCESS, { userId: user[0].id }));
+        .send(util.success(statusCode.OK, resMessage.LOGIN_SUCCESS, { userId: user[0].id }));
 
 })
 
