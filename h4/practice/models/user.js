@@ -22,7 +22,7 @@ const user = {
             throw err;
         }
     },
-    checkUser: async (id) => { 
+    checkUser: async (id) => {
         const query = `SELECT * FROM ${table} WHERE id = "${id}"`;
         try {
             const result = await pool.queryParam(query);
@@ -40,11 +40,29 @@ const user = {
             const result = await pool.queryParam(query);
             if (result[0].password !== encrypt.encryption(password, result[0].salt)) {
                 // 비밀번호가 일치하지 않는가?
-                return -1
+                return -1;
             }
             console.log(result[0])
-            return result[0].useridx
+            return result[0].useridx;
 
+        } catch (err) {
+            throw err;
+        }
+    },
+    getUserById: async (id) => {
+        const query = `SELECT * FROM ${table} WHERE id = "${id}"`;
+        try {
+            const result = await pool.queryParam(query);
+            return result[0];
+        } catch (err) {
+            throw err;
+        }
+    },
+    getUserList: async () => {
+        const query = `SELECT * FROM ${table}`;
+        try {
+            const result = await pool.queryParam(query);
+            return result;
         } catch (err) {
             throw err;
         }

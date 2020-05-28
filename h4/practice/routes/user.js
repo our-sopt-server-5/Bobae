@@ -85,29 +85,30 @@ router.get('/profile/:id', async (req, res) => {
             .send(util.fail(statusCode.BAD_REQUEST, resMessage.NULL_VALUE));
     }
 
-    // 존재하는 아이디인지 확인 - 없다면 No user 반환
-    const user = UserModel.filter(user => user.id === id);
-    if (user.length === 0) {
+    // 아이디가 존재하는가?
+    if (! await UserModel.checkUser(id)) {
         return res.status(statusCode.BAD_REQUEST)
             .send(util.fail(statusCode.BAD_REQUEST, resMessage.NO_USER));
     }
-
+    
+    user = await UserModel.getUserById(id)
     return res.status(statusCode.OK)
         .send(util.success(statusCode.OK, resMessage.READ_PROFILE_SUCCESS,
             {
-                userId: user[0].id,
-                name: user[0].name,
-                email: user[0].email
-            }));
-
-    
+                userId: user.id,
+                name: user.name,
+                email: user.email
+            }));    
 })
 
-router.get('/debug', (req, res) => {
-    console.log(req.query);
-    console.log(req.params);
-    console.log(req.body);
-    res.send("HELLO");
+// Practice
+router.get('/profile', async (req, res) => {
+    userList = await UserModel.getUserList()
+    return res.status(statusCode.OK)
+    .send(util.success(statusCode.OK, resMessage.READ_PROFILE_SUCCESS,
+        {
+            userList
+        }));   
 });
 
 module.exports = router;
