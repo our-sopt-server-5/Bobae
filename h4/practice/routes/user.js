@@ -90,9 +90,9 @@ router.get('/profile/:id', async (req, res) => {
     return res.status(statusCode.OK)
         .send(util.success(statusCode.OK, resMessage.READ_PROFILE_SUCCESS,
             {
-                userId: user.id,
-                name: user.name,
-                email: user.email
+                userId: user[0].id,
+                name: user[0].name,
+                email: user[0].email
             }));    
 })
 
