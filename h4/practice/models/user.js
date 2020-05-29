@@ -52,8 +52,7 @@ const user = {
     getUserById: async (id) => {
         const query = `SELECT * FROM ${table} WHERE id = "${id}"`;
         try {
-            const result = await pool.queryParam(query);
-            return result[0];
+            return await pool.queryParam(query);
         } catch (err) {
             throw err;
         }

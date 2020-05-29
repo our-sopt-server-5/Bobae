@@ -34,19 +34,10 @@ router.post('/signup', async (req, res) => {
         return res.status(statusCode.DB_ERROR).send(util.fail(statusCode.DB_ERROR, resMessage.DB_ERROR));
     }
     
-    // UserModel.push({ id, name, 'password':pwd, salt, email });
     res.status(statusCode.OK)
         .send(util.success(statusCode.OK, resMessage.CREATED_USER, { userId: id }));
 });
 
-/* 
-    ✔️ sign in
-    METHOD : POST
-    URI : localhost:3000/user/signin
-    REQUEST BODY : id, password
-    RESPONSE STATUS : 200 (OK)
-    RESPONSE DATA : User ID
-*/
 router.post('/signin', async (req, res) => {
     // request body 에서 데이터 가져오기
     const { id, password } = req.body;
@@ -61,27 +52,31 @@ router.post('/signin', async (req, res) => {
     // 아이디가 존재하는가?
     if (! await UserModel.checkUser(id)) {
         return res.status(statusCode.BAD_REQUEST)
+            .send(util.fail(statusCode.BAD_REQUEST, resMessage.NULL_VALUE));
+    }
+    
+    const user = await UserModel.getUserById(id);
+    if (user[0] === undefined) {
+        return res.status(statusCode.BAD_REQUEST)
             .send(util.fail(statusCode.BAD_REQUEST, resMessage.NO_USER));
     }
 
-    // 로그인
-    const useridx = await UserModel.signin(id, password)
-    if (useridx < 0) {
-        // 비밀번호 일치하지 않음
+    // password 확인
+    if (user[0].password !== encrypt.encryption(password, user[0].salt)) {
         return res.status(statusCode.BAD_REQUEST)
             .send(util.fail(statusCode.BAD_REQUEST, resMessage.MISS_MATCH_PW));
     }
-
+    
     // 성공 - login success와 함께 user Id 반환
     return res.status(statusCode.OK)
-        .send(util.success(statusCode.OK, resMessage.LOGIN_SUCCESS, { userId:useridx}));
+        .send(util.success(statusCode.OK, resMessage.LOGIN_SUCCESS));
 
 })
 
 router.get('/profile/:id', async (req, res) => {
     const id = req.params.id;
     if (!id) {
-                return res.status(statusCode.BAD_REQUEST)
+        return res.status(statusCode.BAD_REQUEST)
             .send(util.fail(statusCode.BAD_REQUEST, resMessage.NULL_VALUE));
     }
 
