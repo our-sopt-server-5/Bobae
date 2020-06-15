@@ -24,6 +24,10 @@ module.exports = {
     READ_PROFILE_SUCCESS: '프로필 조회 성공',
     UNSUPPORTED_TYPE: '지원하지 않는 타입입니다.',
     UPDATE_PROFILE_SUCCESS: '프로필 업로드 완료',
+
+    // 셀피
+    UPLOAD_SELFIES_SUCCESS: '셀피 업로드 완료',
+    READ_SELFIES_SUCCESS: '셀피 조회 완료',
     
     DB_ERROR: 'DB 오류'
 };

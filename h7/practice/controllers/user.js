@@ -95,5 +95,46 @@ module.exports = {
         // call model - database
         const result = await UserModel.updateProfile(userIdx, profileImg);
         res.status(CODE.OK).send(util.success(CODE.OK, MSG.UPDATE_PROFILE_SUCCESS, result));
-    }
+    },
+    uploadSelfies: async (req, res) => {
+        /*
+        여러개의 파일들을 req.files에 저장
+        req.file[i].location: 파일의 위치
+        maxCount의 개수만큼 받아옴
+        */
+        const userIdx = req.decoded.userIdx;
+        const selfies = req.files;
+        if (selfies === undefined || !userIdx){
+            return res.status(CODE.BAD_REQUEST)
+                .send(util.fail(CODE.BAD_REQUEST, MSG.NULL_VALUE));
+        }
+        const types = selfies.map(selfie => selfie.mimetype.split('/')[1]);
+        for(type of types){
+            if (type !== 'jpeg' && type !== 'jpg' && type !== 'png'){
+                return res.status(CODE.BAD_REQUEST)
+                    .send(util.fail(CODE.BAD_REQUEST, MSG.UNSUPPORTED_TYPE));       
+            }
+        }
+
+        const locations = selfies.map(selfie => selfie.location);
+        for(location of locations){
+            await UserModel.uploadSelfies(userIdx, location);
+        }
+
+        res.status(CODE.OK).send(util.success(CODE.OK, MSG.UPLOAD_SELFIES_SUCCESS, {
+            'selfies': locations
+        }));
+    },
+    getSelfies: async (req, res) => {
+        const userIdx = req.decoded.userIdx;
+        if (!userIdx){
+            return res.status(CODE.BAD_REQUEST)
+                .send(util.fail(CODE.BAD_REQUEST, MSG.NULL_VALUE));
+        }
+        const selfies = await UserModel.getSelfieByIdx(userIdx);
+        const result = selfies.map(img => img.selfie);
+        res.status(CODE.OK).send(util.success(CODE.OK, MSG.READ_SELFIES_SUCCESS, {
+            'selfies': result
+        }));
+    },
 }

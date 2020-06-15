@@ -57,7 +57,30 @@ const user = {
             console.log('update profile ERROR : ', err);
             throw err;
         }
-    }
+    },
+    uploadSelfies: async (userIdx, selfie) => {
+        const fields = 'userIdx, selfie';
+        const questions = `?, ?`;
+        const values = [userIdx, selfie];
+        const query = `INSERT INTO selfie(${fields}) VALUES(${questions})`;
+        try {
+            const result = await pool.queryParamArr(query, values);
+            const insertId = result.insertId;
+            return insertId;
+        } catch (err) {
+            console.log('signup ERROR : ', err);
+            throw err;
+        }
+    },
+    getSelfieByIdx: async (idx) => {
+        const query = `SELECT * FROM selfie WHERE userIdx = "${idx}"`;
+        try{
+            return await pool.queryParam(query);
+        }catch(err){
+            console.log('getSelfieByIdx ERROR : ', err);
+            throw err;
+        }
+    },
 }
 
 module.exports = user;
