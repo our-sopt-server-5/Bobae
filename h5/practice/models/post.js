@@ -2,11 +2,11 @@ const pool = require('../modules/pool');
 const table = 'post';
 
 const post = {
-    createPost: async (title, author, content) => {
+    createPost: async (title, useridx, author, content) => {
 
-        const fields = 'title, author, content';
-        const questions = '?,?,?';
-        const values = [title, author, content];
+        const fields = 'title, useridx, author, content';
+        const questions = '?,?,?,?';
+        const values = [title, useridx, author, content];
         const query = `INSERT INTO ${table}(${fields}) VALUES(${questions})`;
         try {
             const result = await pool.queryParamArr(query, values);

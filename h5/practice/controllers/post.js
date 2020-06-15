@@ -35,13 +35,16 @@ const post = {
     },
     createPost: async (req, res) => {
         // id title content date author 
-        const { title, author, content } = req.body;
-        if (!title || !content || !author) {
+        const user = req.decoded;
+        const useridx = user.idx;
+        const author = user.name;
+        const { title, content } = req.body;
+        if (!title || !useridx || !content || !author) {
             return res.status(statusCode.BAD_REQUEST)
                 .send(util.fail(statusCode.BAD_REQUEST, resMessage.NULL_VALUE));
         }
         
-        const post = await PostModel.createPost(title, author, content);
+        const post = await PostModel.createPost(title, useridx, author, content);
         return res.status(statusCode.OK)
             .send(util.success(statusCode.OK, resMessage.POST_CREATE_SUCCESS));
     },
